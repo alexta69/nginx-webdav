@@ -26,10 +26,10 @@ The username is expected to be the Subject of the certificate. The WebDAV server
 ```yaml
 version: "3"
 services:
-  nginx:
+  nginx-webdav:
     image: alexta69/nginx-webdav
     container_name: nginx-webdav
-     restart: unless-stopped
+    restart: unless-stopped
     ports:
       - "443:443"
     volumes:

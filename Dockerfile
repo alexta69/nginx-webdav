@@ -1,6 +1,6 @@
 FROM alpine
 
-RUN apk add --update-cache uwsgi uwsgi-python3 nginx python3 py3-lxml supervisor && \
+RUN apk add --no-cache uwsgi uwsgi-python3 nginx python3 py3-lxml supervisor && \
     pip3 install wsgidav && \
     mkdir /run/nginx /app
 

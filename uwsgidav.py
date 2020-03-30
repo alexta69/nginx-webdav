@@ -5,14 +5,6 @@ from wsgidav.util import init_logging
 import os
 
 
-def parse_dn(dn):
-    res = {}
-    for pair in dn.split(','):
-        k,v = pair.split('=')
-        res[k] = v
-    return res
-
-
 class Files(FilesystemProvider):
     ROOT_PATH = '/data'
 
@@ -24,10 +16,10 @@ class Files(FilesystemProvider):
             raise Exception('no environ in filesystem access')
         if 'SSL_CLIENT_S_DN' not in environ:
             raise Exception('no SSL_CLIENT_S_DN in environ in filesystem access')
-        dn = parse_dn(environ['SSL_CLIENT_S_DN'])
+        dn = dict((d.split('=') for d in environ['SSL_CLIENT_S_DN'].split(',')))
         if 'CN' not in dn:
             raise Exception('CN not in certificate')
-        new_root = self.ROOT_PATH + '/' + dn['CN']
+        new_root = os.path.join(self.ROOT_PATH, dn['CN'])
         assert new_root == os.path.abspath(new_root)  # no funny ".." business in CN
         p = super()._loc_to_file_path(path, environ)
         assert p.startswith(self.ROOT_PATH)
